@@ -8,6 +8,7 @@
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="manifest" href="manifest.json" />
     <style>
       :root {
         --primary-neon: #00ff9d;
@@ -35,14 +36,15 @@
       }
 
       .game-container {
-        width: 100%;
-        height: 100vh;
+        width: 100vw;
+        height: 100dvh;
+        min-height: 100dvh;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding: clamp(0.5rem, 2vw, 2rem);
-        gap: clamp(1rem, 2vw, 1.5rem);
+        justify-content: flex-start;
+        padding: 0;
+        gap: 0.5rem;
         position: relative;
         overflow: hidden;
       }
@@ -119,8 +121,15 @@
 
       .canvas-container {
         position: relative;
-        width: min(85vw, 85vh);
-        aspect-ratio: 1;
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: min(90vw, 70vh);
+        height: auto;
+        max-width: 100vw;
+        max-height: calc(100dvh - 320px);
+        aspect-ratio: 1 / 1;
         background: var(--board-bg);
         border: 3px solid var(--accent-neon);
         border-radius: clamp(12px, 3vw, 20px);
@@ -128,6 +137,7 @@
         box-shadow: 0 0 30px rgba(138, 43, 226, 0.3),
           inset 0 0 20px rgba(138, 43, 226, 0.2);
         transition: transform 0.3s ease;
+        margin-bottom: 0;
       }
 
       .canvas-container::before {
@@ -324,7 +334,15 @@
         }
 
         .canvas-container {
-          width: min(90vw, 90vh);
+          max-width: 98vw;
+          max-height: calc(100dvh - 340px);
+        }
+      }
+
+      @media (max-width: 500px) {
+        .canvas-container {
+          max-width: 99vw;
+          max-height: calc(100dvh - 370px);
         }
       }
 
@@ -340,7 +358,8 @@
         }
 
         .canvas-container {
-          width: min(80vw, 80vh);
+          max-width: 90vw;
+          max-height: calc(100dvh - 250px);
         }
       }
 
@@ -350,7 +369,7 @@
           flex-wrap: wrap;
           justify-content: center;
           height: auto;
-          min-height: 100vh;
+          min-height: 100dvh;
         }
 
         .header {
@@ -361,7 +380,8 @@
 
         .canvas-container {
           order: 2;
-          width: min(70vh, 50vw);
+          max-width: 70vh;
+          max-height: 70vh;
         }
 
         .controls {
@@ -396,6 +416,202 @@
           opacity: 1;
         }
       }
+
+      @keyframes neonPop {
+        0% {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.08);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .neon-modal-content {
+        border: 2.5px solid #00ff9d;
+        background: linear-gradient(
+          120deg,
+          rgba(26, 26, 46, 0.98) 80%,
+          rgba(138, 43, 226, 0.08) 100%
+        );
+        box-shadow: 0 0 40px #00ff9d, 0 0 80px #8a2be2;
+      }
+      #name-modal input#player-name-input::placeholder {
+        color: #a8ffe3;
+        opacity: 0.7;
+        letter-spacing: 0.05em;
+      }
+      #name-modal input#player-name-input:focus {
+        border-color: #8a2be2;
+      }
+      .neon-name-form {
+        margin: 1.5rem 0 0 0;
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+        justify-content: center;
+      }
+      .neon-name-input,
+      .neon-name-btn {
+        height: 54px;
+        border-radius: 12px;
+        box-sizing: border-box;
+        font-size: 1.2rem;
+        margin: 0;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+      }
+      .neon-name-input {
+        flex: 1;
+        padding: 0 1.2rem;
+        border: 2px solid #00ff9d;
+        background: rgba(26, 26, 46, 0.95);
+        color: #fff;
+        box-shadow: 0 0 12px #00ff9d, 0 0 24px #8a2be2;
+        outline: none;
+        transition: box-shadow 0.3s;
+        min-width: 0;
+      }
+      .neon-name-input:focus {
+        box-shadow: 0 0 20px #00ff9d, 0 0 40px #8a2be2;
+        border-color: #8a2be2;
+      }
+      .neon-name-btn {
+        padding: 0 2.2rem;
+        background: linear-gradient(45deg, #00ff9d 0%, #8a2be2 100%);
+        box-shadow: 0 0 10px #00ff9d, 0 0 20px #8a2be2;
+        min-width: 0;
+        font-size: 1.1rem;
+        font-family: inherit;
+        font-weight: 600;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+      .neon-leaderboard-box {
+        margin: 1.5rem auto 2.5rem auto;
+        padding: 1.2rem 2.2rem;
+        background: rgba(26, 26, 46, 0.95);
+        border: 2.5px solid #00ff9d;
+        border-radius: 18px;
+        box-shadow: 0 0 24px #00ff9d, 0 0 40px #8a2be2;
+        max-width: 350px;
+        min-width: 220px;
+        text-align: left;
+      }
+      #leaderboard-list ol {
+        list-style: decimal inside;
+        padding-left: 0;
+        margin: 0;
+      }
+      #leaderboard-list li {
+        font-family: "Orbitron", sans-serif;
+        font-size: 1.25rem;
+        color: #00ff9d;
+        text-shadow: 0 0 8px #00ff9d, 0 0 16px #8a2be2;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.04em;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      #leaderboard-list li strong {
+        color: #fff;
+        text-shadow: 0 0 8px #00ff9d, 0 0 16px #8a2be2;
+        font-weight: 700;
+      }
+      .neon-leaderboard-btn {
+        margin-top: 1.5rem;
+        padding: 1.1rem 3.2rem;
+        font-size: 1.3rem;
+        background: linear-gradient(45deg, #b44dff 0%, #8a2be2 100%);
+        border-radius: 14px;
+        box-shadow: 0 0 16px #8a2be2, 0 0 32px #b44dff;
+      }
+      .neon-install-btn {
+        background: linear-gradient(45deg, #00ff9d 0%, #8a2be2 100%);
+        color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 10px #00ff9d, 0 0 20px #8a2be2;
+        font-size: 1.1rem;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 600;
+        padding: 0.9rem 2.2rem;
+        margin: 0 0.5rem;
+        display: none;
+      }
+      .neon-share-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(45deg, #232946 0%, #8a2be2 100%);
+        border: 2px solid #8a2be2;
+        border-radius: 12px;
+        box-shadow: 0 0 10px #8a2be2, 0 0 20px #b44dff;
+        padding: 0.7rem 1.2rem;
+        text-decoration: none;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        margin: 0;
+        width: 100%;
+        max-width: 260px;
+      }
+      .neon-share-btn:hover,
+      .neon-share-btn:focus {
+        background: linear-gradient(45deg, #8a2be2 0%, #232946 100%);
+        box-shadow: 0 0 20px #8a2be2, 0 0 40px #b44dff;
+        transform: scale(1.04);
+      }
+      @media (max-width: 500px) {
+        .modal-content.neon-modal-content {
+          max-width: 98vw;
+          padding: 1.2rem 0.5rem;
+        }
+        .neon-share-btn {
+          font-size: 1rem;
+          padding: 0.7rem 0.5rem;
+          max-width: 98vw;
+        }
+      }
+      .neon-action-btn {
+        background: linear-gradient(45deg, #00ff9d 0%, #8a2be2 100%);
+        color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 10px #00ff9d, 0 0 20px #8a2be2;
+        font-size: 1.1rem;
+        font-family: "Orbitron", sans-serif;
+        font-weight: 600;
+        padding: 0.9rem 2.2rem;
+        margin: 0 0.5rem;
+        min-width: 120px;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+      }
+      .neon-action-btn:hover,
+      .neon-action-btn:focus {
+        background: linear-gradient(45deg, #8a2be2 0%, #00ff9d 100%);
+        box-shadow: 0 0 20px #8a2be2, 0 0 40px #00ff9d;
+        transform: scale(1.04);
+      }
+      @media (max-width: 600px) {
+        .game-action-buttons {
+          flex-direction: column;
+          gap: 0.3rem;
+          margin-bottom: 0.1rem;
+        }
+        .neon-action-btn {
+          width: 100%;
+          min-width: 0;
+          padding: 1rem 0;
+        }
+      }
     </style>
   </head>
   <body>
@@ -418,6 +634,33 @@
         </div>
       </header>
 
+      <div
+        style="
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          margin-bottom: 1rem;
+          flex-wrap: wrap;
+        "
+      >
+        <button
+          class="btn neon-install-btn"
+          id="install-btn"
+          style="display: none"
+        >
+          INSTALL
+        </button>
+        <button
+          class="btn"
+          id="share-btn"
+          style="background: linear-gradient(45deg, #ff2d75 0%, #8a2be2 100%)"
+        >
+          SHARE
+        </button>
+        <button class="btn" id="leaderboard-btn">LEADERBOARD</button>
+        <button class="btn" id="group-btn">GROUP</button>
+      </div>
+
       <div class="canvas-container">
         <canvas id="game-board"></canvas>
         <div class="powerup-indicator" id="powerup-indicator"></div>
@@ -430,6 +673,22 @@
         <button class="control-btn" id="left-btn">←</button>
         <button class="control-btn" id="down-btn">↓</button>
         <button class="control-btn" id="right-btn">→</button>
+      </div>
+
+      <div
+        class="game-action-buttons"
+        id="game-action-buttons"
+        style="
+          flex-direction: row;
+          gap: 1.2rem;
+          margin-top: 0.5rem;
+          margin-bottom: 0;
+          justify-content: center;
+          width: 100%;
+        "
+      >
+        <button class="btn neon-action-btn" id="main-start-btn">START</button>
+        <button class="btn neon-action-btn" id="pause-resume-btn">PAUSE</button>
       </div>
 
       <!-- Game Over Modal -->
@@ -446,7 +705,10 @@
               <div class="stat-value" id="final-high-score">0</div>
             </div>
           </div>
-          <button class="btn" id="restart-btn">PLAY AGAIN</button>
+          <div style="display: flex; gap: 1.2rem; justify-content: center">
+            <button class="btn" id="restart-btn">PLAY AGAIN</button>
+            <button class="btn" id="back-btn">BACK</button>
+          </div>
         </div>
       </div>
 
@@ -475,7 +737,7 @@
             <p>• Level up every 50 points</p>
             <p>• Collect powerups for special effects</p>
           </div>
-          <button class="btn" id="start-btn">START GAME</button>
+          <button class="btn" id="start-btn">PROCEED</button>
         </div>
       </div>
 
@@ -484,6 +746,235 @@
         <div class="modal-content">
           <h2 class="modal-title">PAUSED</h2>
           <button class="btn" id="resume-btn">RESUME</button>
+        </div>
+      </div>
+
+      <!-- Leaderboard Modal -->
+      <div class="modal" id="leaderboard-modal">
+        <div class="modal-content">
+          <h2 class="modal-title">LEADERBOARD</h2>
+          <div class="neon-leaderboard-box">
+            <div id="leaderboard-list"></div>
+          </div>
+          <button class="btn neon-leaderboard-btn" id="close-leaderboard-btn">
+            CLOSE
+          </button>
+        </div>
+      </div>
+
+      <!-- Group Modal -->
+      <div class="modal" id="group-modal">
+        <div class="modal-content">
+          <h2 class="modal-title">GROUP & TEAMMATES</h2>
+          <form
+            id="add-teammate-form"
+            class="neon-name-form"
+            style="margin-bottom: 1rem"
+          >
+            <input
+              type="text"
+              id="teammate-name"
+              class="neon-name-input"
+              placeholder="Teammate Name"
+              required
+            />
+            <button
+              type="submit"
+              class="btn neon-name-btn"
+              style="
+                background: linear-gradient(45deg, #b44dff 0%, #8a2be2 100%);
+              "
+            >
+              ADD
+            </button>
+          </form>
+          <div
+            id="group-list"
+            style="margin-bottom: 1.5rem; text-align: left"
+          ></div>
+          <button class="btn" id="close-group-btn">CLOSE</button>
+        </div>
+      </div>
+
+      <!-- Name Entry Modal -->
+      <div class="modal active" id="name-modal">
+        <div
+          class="modal-content neon-modal-content"
+          style="
+            box-shadow: 0 0 40px #00ff9d, 0 0 80px #8a2be2;
+            animation: neonPop 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <div style="margin-bottom: 1rem">
+              <svg
+                width="60"
+                height="60"
+                viewBox="0 0 60 60"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="28"
+                  stroke="#00ff9d"
+                  stroke-width="4"
+                  fill="#1a1a2e"
+                  filter="url(#glow)"
+                />
+                <ellipse
+                  cx="30"
+                  cy="26"
+                  rx="12"
+                  ry="10"
+                  fill="#00ff9d"
+                  fill-opacity="0.15"
+                />
+                <ellipse
+                  cx="30"
+                  cy="26"
+                  rx="7"
+                  ry="6"
+                  fill="#00ff9d"
+                  fill-opacity="0.25"
+                />
+                <ellipse
+                  cx="30"
+                  cy="44"
+                  rx="14"
+                  ry="8"
+                  fill="#8a2be2"
+                  fill-opacity="0.12"
+                />
+                <defs>
+                  <filter id="glow" x="-10" y="-10" width="80" height="80">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+              </svg>
+            </div>
+            <h2
+              class="modal-title"
+              style="
+                color: var(--primary-neon);
+                text-shadow: 0 0 10px #00ff9d, 0 0 20px #8a2be2;
+                letter-spacing: 0.1em;
+              "
+            >
+              ENTER YOUR NAME
+            </h2>
+          </div>
+          <form id="name-form" class="neon-name-form">
+            <input
+              type="text"
+              id="player-name-input"
+              class="neon-name-input"
+              placeholder="Your Name"
+              maxlength="16"
+              autocomplete="off"
+              required
+            />
+            <button type="submit" class="btn neon-name-btn">OK</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Share Modal -->
+      <div class="modal" id="share-modal">
+        <div
+          class="modal-content neon-modal-content"
+          style="max-width: 350px; text-align: center"
+        >
+          <h2 class="modal-title" style="margin-bottom: 1.2rem">
+            SHARE YOUR SCORE!
+          </h2>
+          <div
+            id="share-options"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 1.2rem;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <a
+              id="share-whatsapp"
+              class="neon-share-btn"
+              href="#"
+              target="_blank"
+            >
+              <img
+                src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/whatsapp.svg"
+                alt="WhatsApp"
+                style="
+                  width: 2.2rem;
+                  height: 2.2rem;
+                  margin-right: 0.7rem;
+                  vertical-align: middle;
+                  filter: drop-shadow(0 0 6px #25d366);
+                "
+              />
+              WhatsApp
+            </a>
+            <a
+              id="share-facebook"
+              class="neon-share-btn"
+              href="#"
+              target="_blank"
+            >
+              <img
+                src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
+                alt="Facebook"
+                style="
+                  width: 2.2rem;
+                  height: 2.2rem;
+                  margin-right: 0.7rem;
+                  vertical-align: middle;
+                  filter: drop-shadow(0 0 6px #4267b2);
+                "
+              />
+              Facebook
+            </a>
+            <a
+              id="share-twitter"
+              class="neon-share-btn"
+              href="#"
+              target="_blank"
+            >
+              <img
+                src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg"
+                alt="Twitter"
+                style="
+                  width: 2.2rem;
+                  height: 2.2rem;
+                  margin-right: 0.7rem;
+                  vertical-align: middle;
+                  filter: drop-shadow(0 0 6px #1da1f2);
+                "
+              />
+              Twitter
+            </a>
+          </div>
+          <button
+            class="btn neon-leaderboard-btn"
+            id="close-share-modal"
+            style="margin-top: 2rem"
+          >
+            CLOSE
+          </button>
         </div>
       </div>
     </div>
@@ -530,8 +1021,8 @@
         let snake = [];
         let food = {};
         let powerup = null;
-        let direction = { x: 0, y: 0 };
-        let nextDirection = { x: 0, y: 0 };
+        let direction = { x: 1, y: 0 };
+        let nextDirection = { x: 1, y: 0 };
         let score = 0;
         let highScore = localStorage.getItem("snakeHighScore") || 0;
         let gameRunning = false;
@@ -539,6 +1030,8 @@
         let gameLoop;
         let powerupTimeout;
         let speedBoostActive = false;
+        let playerName = localStorage.getItem("snakePlayerName") || "";
+        let currentTeammate = null;
 
         // Initialize displays
         highScoreDisplay.textContent = highScore;
@@ -546,10 +1039,12 @@
         // Make canvas responsive
         function resizeCanvas() {
           const container = canvas.parentElement;
-          canvas.width = container.clientWidth;
-          canvas.height = container.clientHeight;
-          gridSize = Math.floor(canvas.width / 20);
-          tileCount = Math.floor(canvas.width / gridSize);
+          // Guarantee a perfect square: use the smaller of width/height
+          let size = Math.min(container.offsetWidth, container.offsetHeight);
+          canvas.width = size;
+          canvas.height = size;
+          gridSize = Math.floor(size / 20);
+          tileCount = Math.floor(size / gridSize);
         }
 
         window.addEventListener("resize", () => {
@@ -589,7 +1084,8 @@
             return;
           }
 
-          if (!gameRunning || gamePaused) return;
+          // Only allow direction changes if the game is running
+          if (!gameRunning) return;
 
           handleDirection(
             e.code.replace("Arrow", "").replace("Key", "").toLowerCase()
@@ -630,8 +1126,8 @@
           snake = [
             { x: Math.floor(tileCount / 2), y: Math.floor(tileCount / 2) },
           ];
-          direction = { x: 0, y: 0 };
-          nextDirection = { x: 0, y: 0 };
+          direction = { x: 1, y: 0 };
+          nextDirection = { x: 1, y: 0 };
           score = 0;
           level = 1;
           speed = baseSpeed;
@@ -661,6 +1157,8 @@
           // Start game loop
           if (gameLoop) clearInterval(gameLoop);
           gameLoop = setInterval(gameUpdate, 1000 / speed);
+
+          updatePauseResumeBtn();
         }
 
         function togglePause() {
@@ -783,8 +1281,8 @@
           let newPowerupPos;
           do {
             newPowerupPos = {
-              x: Math.floor(Math.random() * tileCount),
-              y: Math.floor(Math.random() * tileCount),
+              x: Math.floor(Math.random() * (tileCount - 2)) + 1, // keep inside visible area
+              y: Math.floor(Math.random() * (tileCount - 2)) + 1,
               type: Math.random() < 0.5 ? "speed" : "size",
             };
           } while (
@@ -809,8 +1307,8 @@
           let newFoodPos;
           do {
             newFoodPos = {
-              x: Math.floor(Math.random() * tileCount),
-              y: Math.floor(Math.random() * tileCount),
+              x: Math.floor(Math.random() * (tileCount - 2)) + 1, // keep inside visible area
+              y: Math.floor(Math.random() * (tileCount - 2)) + 1,
             };
           } while (
             snake.some(
@@ -903,8 +1401,12 @@
         }
 
         // Event listeners for buttons
-        startBtn.addEventListener("click", startGame);
-        restartBtn.addEventListener("click", startGame);
+        startBtn.addEventListener("click", () => {
+          hideModal(instructionsModal);
+        });
+        restartBtn.addEventListener("click", () => {
+          startGame();
+        });
         resumeBtn.addEventListener("click", () => {
           hideModal(pauseModal);
           togglePause();
@@ -912,7 +1414,268 @@
 
         // Initial draw
         draw();
+
+        // --- INSTALL BUTTON (PWA) ---
+        let deferredPrompt;
+        const installBtn = document.getElementById("install-btn");
+        window.addEventListener("beforeinstallprompt", (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          installBtn.style.display = "inline-block";
+        });
+        installBtn.addEventListener("click", async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === "accepted") {
+              installBtn.style.display = "none";
+            }
+            deferredPrompt = null;
+          }
+        });
+
+        // --- SHARE BUTTON ---
+        const shareBtn = document.getElementById("share-btn");
+        const shareModal = document.getElementById("share-modal");
+        const closeShareModal = document.getElementById("close-share-modal");
+        const shareWhatsapp = document.getElementById("share-whatsapp");
+        const shareFacebook = document.getElementById("share-facebook");
+        const shareTwitter = document.getElementById("share-twitter");
+
+        shareBtn.addEventListener("click", () => {
+          const shareText = `I scored ${score} in Neon Snake! Can you beat me?`;
+          const url = window.location.href;
+          shareWhatsapp.href = `https://wa.me/?text=${encodeURIComponent(
+            shareText + " " + url
+          )}`;
+          shareFacebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+            url
+          )}&quote=${encodeURIComponent(shareText)}`;
+          shareTwitter.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+            shareText
+          )}&url=${encodeURIComponent(url)}`;
+          shareModal.classList.add("active");
+        });
+        closeShareModal.addEventListener("click", () =>
+          shareModal.classList.remove("active")
+        );
+
+        // --- LEADERBOARD ---
+        const leaderboardBtn = document.getElementById("leaderboard-btn");
+        const leaderboardModal = document.getElementById("leaderboard-modal");
+        const leaderboardList = document.getElementById("leaderboard-list");
+        const closeLeaderboardBtn = document.getElementById(
+          "close-leaderboard-btn"
+        );
+        function getLeaderboard() {
+          // Get top 10 scores from localStorage
+          let scores = JSON.parse(
+            localStorage.getItem("snakeLeaderboard") || "[]"
+          );
+          scores.sort((a, b) => b.score - a.score);
+          return scores.slice(0, 10);
+        }
+        function updateLeaderboard(name, score) {
+          let scores = JSON.parse(
+            localStorage.getItem("snakeLeaderboard") || "[]"
+          );
+          // If name exists, keep only the highest score
+          let found = false;
+          scores = scores.map((entry) => {
+            if (entry.name === name) {
+              found = true;
+              return {
+                ...entry,
+                score: Math.max(entry.score, score),
+                date: new Date().toISOString(),
+              };
+            }
+            return entry;
+          });
+          if (!found) {
+            scores.push({ name, score, date: new Date().toISOString() });
+          }
+          localStorage.setItem("snakeLeaderboard", JSON.stringify(scores));
+        }
+        function showLeaderboard() {
+          const scores = getLeaderboard();
+          leaderboardList.innerHTML = scores.length
+            ? `<ol>${scores
+                .map(
+                  (s) =>
+                    `<li><strong>${s.name || "Player"}</strong>: ${
+                      s.score
+                    }</li>`
+                )
+                .join("")}</ol>`
+            : "<p>No scores yet.</p>";
+          leaderboardModal.classList.add("active");
+        }
+        leaderboardBtn.addEventListener("click", showLeaderboard);
+        closeLeaderboardBtn.addEventListener("click", () =>
+          leaderboardModal.classList.remove("active")
+        );
+
+        // --- GROUP/TEAMMATE MANAGEMENT ---
+        const groupBtn = document.getElementById("group-btn");
+        const groupModal = document.getElementById("group-modal");
+        const groupList = document.getElementById("group-list");
+        const closeGroupBtn = document.getElementById("close-group-btn");
+        const addTeammateForm = document.getElementById("add-teammate-form");
+        const teammateNameInput = document.getElementById("teammate-name");
+        function getGroup() {
+          return JSON.parse(localStorage.getItem("snakeGroup") || "[]");
+        }
+        function setGroup(group) {
+          localStorage.setItem("snakeGroup", JSON.stringify(group));
+        }
+        function updateGroupList() {
+          const group = getGroup();
+          if (!group.length) {
+            groupList.innerHTML = "<p>No teammates yet.</p>";
+            return;
+          }
+          groupList.innerHTML = `<ul>${group
+            .map(
+              (t) =>
+                `<li><strong>${
+                  t.name
+                }</strong>: High Score <span style='color:var(--secondary-neon)'>${
+                  t.highScore || 0
+                }</span> <button data-name="${
+                  t.name
+                }" class="btn" style="padding:0.2rem 0.7rem;font-size:0.8rem;margin-left:0.5rem;background:#222;">Remove</button></li>`
+            )
+            .join("")}</ul>`;
+          // Remove teammate
+          groupList.querySelectorAll("button[data-name]").forEach((btn) => {
+            btn.onclick = () => {
+              const name = btn.getAttribute("data-name");
+              setGroup(group.filter((t) => t.name !== name));
+              updateGroupList();
+            };
+          });
+        }
+        addTeammateForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = teammateNameInput.value.trim();
+          if (!name) return;
+          let group = getGroup();
+          if (!group.some((t) => t.name === name)) {
+            group.push({ name, highScore: 0 });
+            setGroup(group);
+            updateGroupList();
+          }
+          teammateNameInput.value = "";
+        });
+        groupBtn.addEventListener("click", () => {
+          updateGroupList();
+          groupModal.classList.add("active");
+        });
+        closeGroupBtn.addEventListener("click", () =>
+          groupModal.classList.remove("active")
+        );
+
+        // --- Name Entry Modal Logic ---
+        const nameModal = document.getElementById("name-modal");
+        const nameForm = document.getElementById("name-form");
+        const playerNameInput = document.getElementById("player-name-input");
+
+        function showNameModal(defaultName = "") {
+          playerNameInput.value = defaultName;
+          nameModal.classList.add("active");
+          playerNameInput.focus();
+        }
+        function hideNameModal() {
+          nameModal.classList.remove("active");
+        }
+
+        nameForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          playerName = playerNameInput.value.trim() || "Player";
+          localStorage.setItem("snakePlayerName", playerName);
+          // No restriction: allow any name
+          const group = getGroup();
+          currentTeammate =
+            group.length && group.some((t) => t.name === playerName)
+              ? playerName
+              : null;
+          hideNameModal();
+          // Do not start the game automatically; wait for START button
+        });
+
+        // --- MAIN START & PAUSE/RESUME BUTTONS ---
+        const mainStartBtn = document.getElementById("main-start-btn");
+        const pauseResumeBtn = document.getElementById("pause-resume-btn");
+
+        function updatePauseResumeBtn() {
+          pauseResumeBtn.textContent = gamePaused ? "RESUME" : "PAUSE";
+        }
+
+        mainStartBtn.addEventListener("click", () => {
+          if (!playerName) {
+            showNameModal("");
+          } else {
+            startGame();
+          }
+        });
+
+        pauseResumeBtn.addEventListener("click", () => {
+          if (!gameRunning) return;
+          togglePause();
+          updatePauseResumeBtn();
+        });
+
+        // Update button label on pause/resume from other triggers
+        const originalTogglePause = togglePause;
+        togglePause = function () {
+          originalTogglePause();
+          updatePauseResumeBtn();
+        };
+
+        // Hide action buttons when instructions modal is active
+        const gameActionButtons = document.getElementById(
+          "game-action-buttons"
+        );
+        function updateActionButtonsVisibility() {
+          if (instructionsModal.classList.contains("active")) {
+            gameActionButtons.style.display = "none";
+          } else {
+            gameActionButtons.style.display = "flex";
+          }
+        }
+        // Initial state
+        updateActionButtonsVisibility();
+        // When instructions modal is closed, show action buttons
+        startBtn.addEventListener("click", () => {
+          setTimeout(updateActionButtonsVisibility, 100); // after modal closes
+        });
+        // Also update on modal show/hide
+        const originalShowModal = showModal;
+        showModal = function (modal) {
+          originalShowModal(modal);
+          updateActionButtonsVisibility();
+        };
+        const originalHideModal = hideModal;
+        hideModal = function (modal) {
+          originalHideModal(modal);
+          updateActionButtonsVisibility();
+        };
+
+        // Back button in Game Over modal
+        const backBtn = document.getElementById("back-btn");
+        backBtn.addEventListener("click", () => {
+          hideModal(gameOverModal);
+          showModal(instructionsModal);
+        });
       });
+    </script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("service-worker.js");
+        });
+      }
     </script>
   </body>
 </html>
